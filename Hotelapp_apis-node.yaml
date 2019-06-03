@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hotelapp-node
+  namespace: playback
+  labels:
+    app: hotelappapis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      namespace: playback
+      labels:
+        app: hotelappapis
+    spec:
+      containers:
+      - name: hotelappapis
+        image: registry.sjc1.splat.ooyala.com:5000/ooyala/playback_service_ui:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: environment
+          value: "next-staging"

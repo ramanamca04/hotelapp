@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hotelappmongodb-node-service
+  namespace: playback
+  # These two lines below creates an 'internal' AWS elb.
+  #   internal ELB - will only be accessible via Ooyala's network. (e.g. Office network, Ooyala HAproxy load balancer etc)
+  #   external ELB - publicly accessiable.
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+    # The next line creates a CNAME for your service. For now, CNAMEs are only in the splat.ooyala.com domain.
+    domainName: "hotelappmongodbsvc.next-staging.splat.ooyala.com"
+    # Values for "{env}" (optional): next-staging, staging and prod.
+    # "{region}" is also supported and has the value "us-east-1-vpc" for now.
+spec:
+  type: LoadBalancer
+  selector:
+    app: hotelappmongodb
+  ports:
+  - port: 8080
+    name: ps
+    protocol: TCP
+    targetPort: 8080
